@@ -9,7 +9,7 @@ import SwiftUI
 
 public extension View {
     
-    /// renders configurable confetti animaiton
+    /// renders configurable confetti animation
     ///
     /// - Usage:
     ///
@@ -42,9 +42,10 @@ public extension View {
     ///   - radius: explosion radius
     ///   - repetitions: number of repetitions of the explosion
     ///   - repetitionInterval: duration between the repetitions
+    ///   - hapticFeedback: enable or disable haptic feedback
     ///
-    @ViewBuilder func confettiCannon(
-        counter: Binding<Int>,
+    @ViewBuilder func confettiCannon<T>(
+        trigger: Binding<T>,
         num: Int = 20,
         confettis: [ConfettiType] = ConfettiType.allCases,
         colors: [Color] = [.blue, .red, .green, .yellow, .pink, .purple, .orange],
@@ -55,13 +56,14 @@ public extension View {
         openingAngle: Angle = .degrees(60),
         closingAngle: Angle = .degrees(120),
         radius: CGFloat = 300,
-        repetitions: Int = 0,
-        repetitionInterval: Double = 1.0
-    ) -> some View {
+        repetitions: Int = 1,
+        repetitionInterval: Double = 1.0,
+				hapticFeedback: Bool = true
+    ) -> some View where T: Equatable {
         ZStack {
-            self
+            self.layoutPriority(1)
             ConfettiCannon(
-                counter: counter,
+                trigger: trigger,
                 num: num,
                 confettis: confettis,
                 colors: colors,
@@ -73,7 +75,8 @@ public extension View {
                 closingAngle: closingAngle,
                 radius: radius,
                 repetitions: repetitions,
-                repetitionInterval: repetitionInterval
+                repetitionInterval: repetitionInterval,
+                hapticFeedback: hapticFeedback
             )
         }
     }
